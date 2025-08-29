@@ -151,7 +151,8 @@ class ViewController: UIViewController {
             showAlert(message: "Please select at least one filter category")
             return
         }
-
+        resultsCollectionView.isHidden = true
+        resultsCollectionView.alpha = 0
         netMan.diff = difficulty
         netMan.muscule = muscle
         netMan.sport = workoutType
@@ -162,6 +163,7 @@ class ViewController: UIViewController {
                     print("Successfully loaded \(exercises.count) exercises")
                     self.exercisesArray = exercises
                     print("Data loaded, array count: \(self.exercisesArray.count)")
+                    self.resetSelections()
                     self.preloadImagesForExercises()
                     self.resultsCollectionView.reloadData()
                     if !self.exercisesArray.isEmpty {
@@ -211,6 +213,30 @@ class ViewController: UIViewController {
         let alert = UIAlertController(title: "Attention", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
+    }
+    
+    private func showExerciseDetail(_ exercise: Exercise) {
+        let detailVC = ExerciseDetailViewController()
+        detailVC.exercise = exercise
+        detailVC.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
+    private func resetSelections() {
+        lastSelectedWorkoutCell?.deselected()
+        lastSelectedMuscleCell?.deselected()
+        lastSelectedDifficultyCell?.deselected()
+        lastSelectedResultCell?.deselected()
+        
+        lastSelectedWorkoutCell = nil
+        lastSelectedMuscleCell = nil
+        lastSelectedDifficultyCell = nil
+        lastSelectedResultCell = nil
+        
+        workoutTypeCollectionView.selectItem(at: nil, animated: false, scrollPosition: [])
+        musculeTypeCollectionView.selectItem(at: nil, animated: false, scrollPosition: [])
+        dificultyTypeCollectionView.selectItem(at: nil, animated: false, scrollPosition: [])
+        resultsCollectionView.selectItem(at: nil, animated: false, scrollPosition: [])
     }
     
     //MARK: - Lifecycle
@@ -308,6 +334,7 @@ extension ViewController: UISearchBarDelegate {
                 resultsCollectionView.reloadData()
                 resultsCollectionView.isHidden = true
                 resultsCollectionView.alpha = 0
+                resetSelections()
             } else {
                 // Задержка для избежания частых запросов при вводе
                 perform(#selector(performDelayedSearch), with: searchText, afterDelay: 0.5)
@@ -322,7 +349,8 @@ extension ViewController: UISearchBarDelegate {
         let selectedMuscle = lastSelectedMuscleCell?.label.text
         let selectedType = lastSelectedWorkoutCell?.label.text
         let selectedDifficulty = lastSelectedDifficultyCell?.label.text
-        
+        resultsCollectionView.isHidden = true
+        resultsCollectionView.alpha = 0
         netMan.searchExercises(
             name: searchText,
             muscle: selectedMuscle,
@@ -334,6 +362,7 @@ extension ViewController: UISearchBarDelegate {
                 switch result {
                 case .success(let exercises):
                     self.exercisesArray = exercises
+                    self.resetSelections()
                     self.preloadImagesForExercises()
                     self.resultsCollectionView.reloadData()
                     if !self.exercisesArray.isEmpty {
@@ -433,40 +462,34 @@ extension ViewController : UICollectionViewDelegate, UICollectionViewDataSource,
         switch collectionView {
         case workoutTypeCollectionView:
             if let cell = collectionView.cellForItem(at: indexPath) as? Cell {
-                if cell == lastSelectedWorkoutCell {
-                    lastSelectedWorkoutCell?.deselected()
-                } else {
-                    lastSelectedWorkoutCell?.deselected()
-                    cell.selected()
-                    lastSelectedWorkoutCell = cell
-                }
-            }
+                        // Сбрасываем предыдущее выделение
+                        lastSelectedWorkoutCell?.deselected()
+                        
+                        // Устанавливаем новое выделение
+                        cell.selected()
+                        lastSelectedWorkoutCell = cell
+                    }
         case musculeTypeCollectionView:
             if let cell = collectionView.cellForItem(at: indexPath) as? Cell {
-                if cell == lastSelectedMuscleCell {
-                    lastSelectedMuscleCell?.deselected()
-                } else {
-                    lastSelectedMuscleCell?.deselected()
-                    cell.selected()
-                    lastSelectedMuscleCell = cell
-                }
-            }
+                        lastSelectedMuscleCell?.deselected()
+                        cell.selected()
+                        lastSelectedMuscleCell = cell
+                    }
         case dificultyTypeCollectionView:
             if let cell = collectionView.cellForItem(at: indexPath) as? Cell {
-                if cell == lastSelectedDifficultyCell {
-                    lastSelectedDifficultyCell?.deselected()
-                } else {
-                    lastSelectedDifficultyCell?.deselected()
-                    cell.selected()
-                    lastSelectedDifficultyCell = cell
-                }
-            }
+                        lastSelectedDifficultyCell?.deselected()
+                        cell.selected()
+                        lastSelectedDifficultyCell = cell
+                    }
         case resultsCollectionView:
             if let cell = collectionView.cellForItem(at: indexPath) as? ResultCell {
-                lastSelectedResultCell?.deselected()
-                cell.selected()
-                lastSelectedResultCell = cell
-            }
+                        lastSelectedResultCell?.deselected()
+                        cell.selected()
+                        lastSelectedResultCell = cell
+                        
+                        let exercise = exercisesArray[indexPath.item]
+                        self.showExerciseDetail(exercise)
+                    }
         default:
             fatalError("Unknown collection view")
         }

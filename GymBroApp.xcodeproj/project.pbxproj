@@ -29,6 +29,11 @@
 			path = GymBroApp;
 			sourceTree = "<group>";
 		};
+		1BE9154D2E61D97F00BD4502 /* FavoriteViewController */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FavoriteViewController;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +52,7 @@
 			children = (
 				1BE9145F2E5DE3BA00BD4502 /* GymBroApp */,
 				1BE9145E2E5DE3BA00BD4502 /* Products */,
+				1BE9154D2E61D97F00BD4502 /* FavoriteViewController */,
 			);
 			sourceTree = "<group>";
 		};
@@ -75,6 +81,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				1BE9145F2E5DE3BA00BD4502 /* GymBroApp */,
+				1BE9154D2E61D97F00BD4502 /* FavoriteViewController */,
 			);
 			name = GymBroApp;
 			packageProductDependencies = (

@@ -13,4 +13,11 @@ struct Exercise : Codable {
     let equipment : String
     let difficulty : String
     let instructions : String
+    var imageUrl: String?
+    var imageData: Data? 
+    
+    var image: UIImage? {
+        guard let imageData = imageData else { return nil }
+        return UIImage(data: imageData)
+    }
 }

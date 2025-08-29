@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     var exercisesArray : [Exercise] = []
     var searchActivate = false
     
+    private let imageManager = GoogleImageManager.shared
     
     private var lastSelectedWorkoutCell: Cell?
     private var lastSelectedMuscleCell: Cell?
@@ -161,6 +162,7 @@ class ViewController: UIViewController {
                     print("Successfully loaded \(exercises.count) exercises")
                     self.exercisesArray = exercises
                     print("Data loaded, array count: \(self.exercisesArray.count)")
+                    self.preloadImagesForExercises()
                     self.resultsCollectionView.reloadData()
                     if !self.exercisesArray.isEmpty {
                         self.resultsCollectionView.isHidden = false
@@ -177,6 +179,32 @@ class ViewController: UIViewController {
             }
         }
         print(exercisesArray.count)
+    }
+    
+    private func preloadImagesForExercises() {
+        for (index, exercise) in exercisesArray.enumerated() {
+            // Загружаем изображение только если его еще нет
+            if exercise.imageData == nil {
+                imageManager.loadImageForExercise(exercise) { [weak self] imageData in
+                    DispatchQueue.main.async {
+                        guard let self = self,
+                              index < self.exercisesArray.count,
+                              let imageData = imageData else { return }
+                        
+                        // Обновляем упражнение с данными изображения
+                        self.exercisesArray[index].imageData = imageData
+                        
+                        // Перезагружаем только конкретную ячейку
+                        let indexPath = IndexPath(item: index, section: 0)
+                        
+                        // Проверяем, видима ли ячейка сейчас
+                        if self.resultsCollectionView.indexPathsForVisibleItems.contains(indexPath) {
+                            self.resultsCollectionView.reloadItems(at: [indexPath])
+                        }
+                    }
+                }
+            }
+        }
     }
     
     private func showAlert(message: String) {
@@ -306,6 +334,7 @@ extension ViewController: UISearchBarDelegate {
                 switch result {
                 case .success(let exercises):
                     self.exercisesArray = exercises
+                    self.preloadImagesForExercises()
                     self.resultsCollectionView.reloadData()
                     if !self.exercisesArray.isEmpty {
                         self.resultsCollectionView.isHidden = false
@@ -379,6 +408,21 @@ extension ViewController : UICollectionViewDelegate, UICollectionViewDataSource,
             cell.titleLabel.text = exercisesArray[indexPath.item].name
             cell.equipLabel.text = exercisesArray[indexPath.item].equipment
             cell.backgroundImageView.image = UIImage(named: "vlasov")
+            if let image = exercisesArray[indexPath.item].image {
+                cell.backgroundImageView.image = image
+            } else {
+                cell.backgroundImageView.image = UIImage(named: "vlasov")
+                imageManager.loadImageForExercise(exercisesArray[indexPath.item]) { [weak self] imageData in
+                    DispatchQueue.main.async {
+                        guard let self = self,
+                              indexPath.item < self.exercisesArray.count,
+                              let imageData = imageData,
+                              let currentCell = self.resultsCollectionView.cellForItem(at: indexPath) as? ResultCell else { return }
+                        self.exercisesArray[indexPath.item].imageData = imageData
+                        currentCell.backgroundImageView.image = UIImage(data: imageData)
+                    }
+                }
+            }
             return cell
         default:
             fatalError("Unknown collection view")

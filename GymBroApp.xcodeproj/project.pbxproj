@@ -6,13 +6,8 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		1BE9154F2E61EADB00BD4502 /* ExerciseDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE9154E2E61EACE00BD4502 /* ExerciseDetailViewController.swift */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		1BE9145D2E5DE3BA00BD4502 /* GymBroApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GymBroApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1BE9154E2E61EACE00BD4502 /* ExerciseDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -39,6 +34,11 @@
 			path = FavoriteViewController;
 			sourceTree = "<group>";
 		};
+		1BE915512E61F46700BD4502 /* ExerciseDetailViewController */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ExerciseDetailViewController;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +58,7 @@
 				1BE9145F2E5DE3BA00BD4502 /* GymBroApp */,
 				1BE9145E2E5DE3BA00BD4502 /* Products */,
 				1BE9154D2E61D97F00BD4502 /* FavoriteViewController */,
-				1BE9154E2E61EACE00BD4502 /* ExerciseDetailViewController.swift */,
+				1BE915512E61F46700BD4502 /* ExerciseDetailViewController */,
 			);
 			sourceTree = "<group>";
 		};
@@ -88,6 +88,7 @@
 			fileSystemSynchronizedGroups = (
 				1BE9145F2E5DE3BA00BD4502 /* GymBroApp */,
 				1BE9154D2E61D97F00BD4502 /* FavoriteViewController */,
+				1BE915512E61F46700BD4502 /* ExerciseDetailViewController */,
 			);
 			name = GymBroApp;
 			packageProductDependencies = (
@@ -145,7 +146,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BE9154F2E61EADB00BD4502 /* ExerciseDetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

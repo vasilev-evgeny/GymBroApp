@@ -8,7 +8,7 @@ import UIKit
 import Foundation
 
 class NetworkManager {
-    private let apiKey = "qUiYfR8gL87+IGZc+6Q5+g==h1xsANlr8cCWUEQ5"
+    private let apiKey = "cg0c6zqK2+O1yfqbvLKeMA==N5xB9fT0T0nqOpRB"
     private let baseURLString = "https://api.api-ninjas.com/v1/exercises"
     var muscule : String?
     var sport : String?

@@ -425,10 +425,12 @@ extension ViewController : UICollectionViewDelegate, UICollectionViewDataSource,
         case musculeTypeCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! Cell
             cell.label.text = musculeType[indexPath.item]
+            cell.backgroundImageView.image = UIImage(named: musculeType[indexPath.item])
             return cell
         case dificultyTypeCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! Cell
             cell.label.text = dificulty[indexPath.item]
+            cell.backgroundImageView.image = UIImage(named: dificulty[indexPath.item])
             return cell
         case resultsCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ResultCell", for: indexPath) as! ResultCell
